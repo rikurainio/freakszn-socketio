@@ -1,0 +1,21 @@
+{
+  "name": "freakszn-socketio",
+  "version": "1.0.0",
+  "description": "socketio server for freakszn inhouse app",
+  "scripts": {
+    "dev": "nodemon src/server.ts",
+    "test:socket": "nodemon testSocket.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.0",
+    "typescript": "^5.4.3"
+  }
+}
