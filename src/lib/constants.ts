@@ -1,18 +1,22 @@
-import { QueueState } from "./types";
+import { Game, QueueState } from "./types";
 
-export const INITIAL_QUEUE_STATE: QueueState = {
+const roles = {
   top: [],
   jungle: [],
   mid: [],
   adc: [],
-  support: [],
+  support: []
+}
+
+export const INITIAL_QUEUE_STATE: QueueState = {
+  ...roles,
   fill: []
 }
 
 export const INITIAL_GAME = {
   name: "freakszn",
   teams: {
-    blue: { ...INITIAL_QUEUE_STATE },
-    red: { ...INITIAL_QUEUE_STATE },
+    blue: { ...roles },
+    red: { ...roles },
   },
-}
+} as any as Game

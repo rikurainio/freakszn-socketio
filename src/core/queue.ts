@@ -1,12 +1,14 @@
 import { Server } from "socket.io"
 import { INITIAL_GAME, INITIAL_QUEUE_STATE } from "../lib/constants"
-import { Game, QueueState, Role, Side } from "../lib/types"
+import { GameRole, Game as GameType, QueueState, Role, Side } from "../lib/types"
 import { QueuePop } from "./quePop"
 import { Player } from "./player"
+import { Game } from "./game"
 
 export class Queue {
   state: QueueState = INITIAL_QUEUE_STATE
-  game: Game = INITIAL_GAME
+  game: GameType = INITIAL_GAME
+  gameHandler: Game
   
   gameStarted: boolean = false
   isQueuePopped: boolean = false
@@ -14,8 +16,10 @@ export class Queue {
   qp: QueuePop
   io: Server
 
-  constructor(io: Server){
+  constructor(io: Server, players: Record<string, Player>, gameHandler:Game){
     this.io = io
+    this.players = players
+    this.gameHandler = gameHandler
   }
 
   public queue(jotain: any, role: Role){
@@ -62,14 +66,16 @@ export class Queue {
       for(const team of Math.floor(Math.random() * 1) === 2 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
           const fillSelectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
-          this.game.teams[team as Side][role as Role] = this.qp.state['fill'].splice(fillSelectIndex, 1)
+          this.game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
           continue
         }
         const selectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
-        this.game.teams[team as Side][role as Role] = this.qp.state[role as Role].splice(selectIndex ,1)
+        this.game.teams[team as Side][role as GameRole] = this.qp.state[role as Role].splice(selectIndex ,1)[0]
       }
     }
     this.isQueuePopped = false
+
+    this.gameHandler.setPlayers(this.game)
   }
   private queuePop(){
     if(this.isQueuePopped){ return }
