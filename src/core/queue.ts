@@ -22,15 +22,22 @@ export class Queue {
     this.gameHandler = gameHandler
   }
 
-  public queue(jotain: any, role: Role){
-    this.deQueue(jotain)
-    this.state[role].push(this.players[jotain])
-    this.players[jotain].role = this.state[role]
+  /** 
+   * @param id id of the socket
+   * @param role role to queue to
+   * @example queues id "1" to jungle
+   * queue("1", "jungle")
+   */
+  public queue(name: string, role: Role){
+    this.deQueue(name)
+    this.state[role].push(this.players[name])
+    this.players[name].role = this.state[role]
     this.canFormMatch()
     this.emitState()
   }
   public deQueue(jotain: any){
-    this.players[jotain].deQueue()
+    if(!jotain){ return }
+    this.players[jotain]?.deQueue()
     this.emitState()
   }
   public accept(jotain: any){
