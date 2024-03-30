@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import { Queue } from "./core/queue";
 import { Player } from "./core/player";
 import { Game } from "./core/game";
+import { Logger } from "./lib/logger";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -29,34 +30,42 @@ io.on("connection", (socket) => {
   queue.emitState()
 
   socket.on("queue", (data) => {
+    Logger.qa("queue", data, socket.id)
     queue.queue(socket.id, data)
   })
 
   socket.on("dequeue", () => {
+    Logger.qa("dequeue", id)
     queue.deQueue(id)
   })
 
   socket.on("accept", () => {
+    Logger.qa("accept", id)
     queue.accept(id)
   })
 
   socket.on("set-client-open", (data) => {
+    Logger.qa("set-client-open", data)
     player.setClientOpen(data)
   })
 
   socket.on("set-ingame", (data) => {
+    Logger.qa("set-ingame", data)
     player.setInGame(data)
   })
   
   socket.on("set-name", (data) => {
+    Logger.qa("set-name", data)
     player.setName(data)
   })
 
   socket.on("join-lobby", () => {
+    Logger.qa("join-lobby", player)
     game.joinLobby(player)
   })
 
   socket.on("set-current-lobby-id", (data) => {
+    Logger.qa("set-current-lobby-id", data)
     game.setLobbyID(data)
   })
 
@@ -64,7 +73,6 @@ io.on("connection", (socket) => {
     delete players[socket.id]
   })
 });
-
 
 httpServer.listen(3000, () => {
   console.log('morbba :--D')
