@@ -34,6 +34,11 @@ io.on("connection", (socket) => {
     queue.queue(socket.id, role)
   })
 
+  socket.on("mock-accept-all", () => {
+    Logger.qa("mock-accept-all")
+    queue.mockAcceptAll()
+  })
+
   socket.on("dequeue", () => {
     Logger.qa("dequeue", id)
     queue.deQueue(socket.id)
