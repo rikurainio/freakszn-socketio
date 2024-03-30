@@ -6,7 +6,9 @@ import { Game } from "./core/game";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
-  // ...
+  cors: {
+    origin: "*"
+  },
 });
 
 const players: Record<string, Player> = {}
