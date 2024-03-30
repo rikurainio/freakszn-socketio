@@ -15,6 +15,13 @@ export class QueuePop {
     this.state = state
   }
 
+  public removeQueues(){
+    return Object
+      .values(this.state)
+      .forEach((pArr: Player[]) => pArr
+      .forEach((p: Player) => p.deQueue()))
+  }
+
   public removeAccepts(){
     return Object
       .values(this.state)

@@ -46,12 +46,11 @@ export class Game {
     private mergeTeams(teamGroups: any): Player[] {
         const { blue, red } = teamGroups;
         const merged: Player[] = [];
-      
         const positions = ['top', 'jungle', 'mid', 'adc', 'support'];
       
         positions.forEach(position => {
-          merged.push(...blue[position]);
-          merged.push(...red[position]);
+          merged.push(blue[position]);
+          merged.push(red[position]);
         });
       
         return merged;

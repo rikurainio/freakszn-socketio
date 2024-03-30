@@ -4,6 +4,7 @@ import { GameRole, Game as GameType, QueueState, Role, Side } from "../lib/types
 import { QueuePop } from "./quePop"
 import { Player } from "./player"
 import { Game } from "./game"
+import { io } from "socket.io-client"
 
 export class Queue {
   state: QueueState = INITIAL_QUEUE_STATE
@@ -35,13 +36,14 @@ export class Queue {
     this.canFormMatch()
     this.emitState()
   }
-  public deQueue(jotain: any){
-    if(!jotain){ return }
-    this.players[jotain]?.deQueue()
+  public deQueue(id: string){
+    if(!id){ return }
+    this.players[id]?.deQueue()
     this.emitState()
   }
-  public accept(jotain: any){
-    this.players[jotain].accepted = true
+  public accept(id: string){
+    if(this.players[id].role === undefined){ return }
+    this.players[id].accepted = true
     
     /** Create match if everyone accepted */
     if(this.qp.checkAccepts()){
@@ -69,10 +71,11 @@ export class Queue {
   }
   private formMatch(){
     this.qp.removeAccepts()
+    this.qp.removeQueues()
     for(const role of Object.keys(this.qp.state)){
       for(const team of Math.floor(Math.random() * 1) === 2 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
-          const fillSelectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
+          const fillSelectIndex = Math.floor(Math.random() * this.qp.state['fill'].length)
           this.game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
           continue
         }
@@ -81,7 +84,6 @@ export class Queue {
       }
     }
     this.isQueuePopped = false
-
     this.gameHandler.setPlayers(this.game)
   }
   private queuePop(){
@@ -95,14 +97,20 @@ export class Queue {
     let memberCount = 0
     for(const role of Object.keys(this.state)){
       if(role !== 'fill'){
-        const addedMemberCount = Math.min(role.length, 2)
+        const addedMemberCount = Math.min(this.state[role as Role].length, 2)
         members[role] = this.state[role as Role].slice(0, addedMemberCount)
         memberCount += addedMemberCount
       }
     }
-    members['fill'] = this.state['fill'].slice(0, 10-memberCount)
+    members['fill'] = this.state['fill'].slice(0, 10)
     return members
   }
+  public mockAcceptAll(){
+    Object.keys(this.players).forEach((id: string) => {
+      this.accept(id)
+    })
+  }
+
   public emitState(){
 
     const statePlayers = {
