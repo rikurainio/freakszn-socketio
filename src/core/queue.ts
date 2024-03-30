@@ -96,7 +96,7 @@ export class Queue {
     members['fill'] = this.state['fill'].slice(0, 10-memberCount)
     return members
   }
-  private emitState(){
+  public emitState(){
 
     const statePlayers = {
       top: this.state.top.map((p: Player) => p.name),

@@ -26,6 +26,8 @@ io.on("connection", (socket) => {
     players[socket.id] = player
   }
 
+  queue.emitState()
+
   socket.on("queue", (data) => {
     queue.queue(socket.id, data)
   })
