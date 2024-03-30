@@ -29,19 +29,19 @@ io.on("connection", (socket) => {
 
   queue.emitState()
 
-  socket.on("queue", (data) => {
-    Logger.qa("queue", data, socket.id)
-    queue.queue(socket.id, data)
+  socket.on("queue", (role) => {
+    Logger.qa("queue", role, socket.id)
+    queue.queue(socket.id, role)
   })
 
   socket.on("dequeue", () => {
     Logger.qa("dequeue", id)
-    queue.deQueue(id)
+    queue.deQueue(socket.id)
   })
 
   socket.on("accept", () => {
     Logger.qa("accept", id)
-    queue.accept(id)
+    queue.accept(socket.id)
   })
 
   socket.on("set-client-open", (data) => {
