@@ -13,8 +13,10 @@ export class Queue {
   
   gameStarted: boolean = false
   isQueuePopped: boolean = false
+  queuePopTimer = () => { return this.qp?.timer }
+  queuePopTimerInterval: NodeJS.Timeout | undefined
   players: Record<string, Player>
-  qp: QueuePop
+  qp: QueuePop | undefined
   io: Server
 
   constructor(io: Server, players: Record<string, Player>, gameHandler:Game){
@@ -46,15 +48,44 @@ export class Queue {
     this.players[id].accepted = true
     
     /** Create match if everyone accepted */
-    if(this.qp.checkAccepts()){
+    if(this.qp && this.qp.checkAccepts()){
       this.formMatch() 
       this.emitState()
     }
     this.emitState()
   }
-  public decline(){
-
+  public decline(id: string){
+    this.deQueue(id)
+    this.handleQueuePopDecline(id)
+    this.emitState()
   }
+
+  private startQueuePopTimer() {
+    this.queuePopTimerInterval = setInterval(() => {
+      if (!this.qp) { return }
+      if (this.qp.timer <= 0) {
+        this.qp.dequeueUnaccepts()
+        this.qp = undefined
+        this.isQueuePopped = false
+        clearInterval(this.queuePopTimerInterval)
+        return
+      }
+      this.qp.timer--
+      console.log("pop timer:", this.qp.timer)
+      this.emitState()
+    }, 1000)
+  }
+
+  private handleQueuePopDecline(id: string){
+    this.isQueuePopped = false
+    this.qp = undefined
+    clearInterval(this.queuePopTimerInterval)
+  }
+
+  private stopQueuePopTimer(){
+    clearInterval(this.queuePopTimerInterval)
+  }
+
   private canFormMatch(){
     let sum = 0;
     for (const role of Object.keys(this.state)) {
@@ -70,6 +101,8 @@ export class Queue {
     }
   }
   private formMatch(){
+    if (!this.qp) { return }
+    this.stopQueuePopTimer()
     this.qp.removeAccepts()
     this.qp.removeQueues()
     for(const role of Object.keys(this.qp.state)){
@@ -85,11 +118,13 @@ export class Queue {
     }
     this.isQueuePopped = false
     this.gameHandler.setPlayers(this.game)
+    console.log("Match formed successfully")
   }
   private queuePop(){
     if(this.isQueuePopped){ return }
     this.isQueuePopped = true
     this.qp = new QueuePop(this.getQueuePopMembers())
+    this.startQueuePopTimer()
     this.emitState()
   }
   private getQueuePopMembers(){

@@ -2,6 +2,7 @@ import { QueueState } from "../lib/types"
 import { Player } from "./player"
 
 export class QueuePop {
+  public timer = 30
   state: QueueState = {
     top: [],
     jungle: [],
@@ -34,5 +35,12 @@ export class QueuePop {
       .values(this.state)
       .every((r: Player[]) => r
       .every((p: Player) => p.accepted === true))
+  }
+
+  public dequeueUnaccepts(){
+    return Object
+      .values(this.state)
+      .forEach((pArr: Player[]) => pArr
+      .forEach((p: Player) => {if (!p.accepted) {p.deQueue()}}))
   }
 }
