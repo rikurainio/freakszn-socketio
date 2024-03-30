@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
   }
 
   socket.on("queue", (data) => {
-    queue.queue(player, data)
+    queue.queue(socket.id, data)
   })
 
   socket.on("dequeue", () => {
@@ -56,6 +56,10 @@ io.on("connection", (socket) => {
 
   socket.on("set-current-lobby-id", (data) => {
     game.setLobbyID(data)
+  })
+
+  socket.on("disconnecting", () => {
+    delete players[socket.id]
   })
 });
 

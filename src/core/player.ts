@@ -34,6 +34,7 @@ export class Player {
   }
 
   deQueue(){
+    if (!this.role) { return }
     try {
       this.role.splice(this.role.indexOf(this), 1)
     } catch (e) {

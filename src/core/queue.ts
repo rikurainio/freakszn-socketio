@@ -97,10 +97,39 @@ export class Queue {
     return members
   }
   private emitState(){
+
+    const statePlayers = {
+      top: this.state.top.map((p: Player) => p.name),
+      jungle: this.state.jungle.map((p: Player) => p.name),
+      mid: this.state.mid.map((p: Player) => p.name),
+      adc: this.state.adc.map((p: Player) => p.name),
+      support: this.state.support.map((p: Player) => p.name),
+      fill: this.state.fill.map((p: Player) => p.name)
+    }
+
+    const gamePlayers = {
+      blue: {
+        top: this.game.teams.blue.top.name,
+        jungle: this.game.teams.blue.jungle.name,
+        mid: this.game.teams.blue.mid.name,
+        adc: this.game.teams.blue.adc.name,
+        support: this.game.teams.blue.support.name
+      },
+      red: {
+        top: this.game.teams.red.top.name,
+        jungle: this.game.teams.red.jungle.name,
+        mid: this.game.teams.red.mid.name,
+        adc: this.game.teams.red.adc.name,
+        support: this.game.teams.red.support.name
+      }
+    }
+
     this.io.in('freakszn').emit("state", {
-      state: this.state, 
-      game: this.game, 
+      state: statePlayers, 
+      game: gamePlayers,
       gameStarted: this.gameStarted
     })
   }
+
+  
 }
