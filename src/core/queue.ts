@@ -68,6 +68,7 @@ export class Queue {
         this.qp = undefined
         this.isQueuePopped = false
         clearInterval(this.queuePopTimerInterval)
+        this.emitState()
         return
       }
       this.qp.timer--
@@ -119,6 +120,8 @@ export class Queue {
     this.isQueuePopped = false
     this.gameHandler.setPlayers(this.game)
     console.log("Match formed successfully")
+
+    this.emitGame()
   }
   private queuePop(){
     if(this.isQueuePopped){ return }
@@ -179,6 +182,30 @@ export class Queue {
       game: gamePlayers,
       gameStarted: this.gameStarted
     })
+
+  }
+  private emitGame(){
+    const gamePlayers = {
+      blue: {
+        top: this.game.teams.blue.top.name,
+        jungle: this.game.teams.blue.jungle.name,
+        mid: this.game.teams.blue.mid.name,
+        adc: this.game.teams.blue.adc.name,
+        support: this.game.teams.blue.support.name
+      },
+      red: {
+        top: this.game.teams.red.top.name,
+        jungle: this.game.teams.red.jungle.name,
+        mid: this.game.teams.red.mid.name,
+        adc: this.game.teams.red.adc.name,
+        support: this.game.teams.red.support.name
+      }
+    }
+      Object.values(this.game.teams).forEach((team) => {
+        Object.values(team).forEach((player) => {
+          player.socket.emit("game-start", gamePlayers)
+        })
+      })
   }
 
   
