@@ -5,7 +5,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
   iconId: number
   socket: Socket
-  role: Player[]
+  role: Player[] | undefined
   accepted: boolean
   currentGame: Game
 
@@ -44,6 +44,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     if (!this.role) { return }
     try {
       this.role.splice(this.role.indexOf(this), 1)
+      this.role = undefined
     } catch (e) {
       console.log('cant deque:', e)
     }
