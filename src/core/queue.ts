@@ -111,6 +111,7 @@ export class Queue {
     const newGame = new Game()
 
     for(const role of Object.keys(this.qp.state)){
+      if(role === "fill"){ continue }
       for(const team of Math.floor(Math.random() * 1) === 2 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
           const fillSelectIndex = Math.floor(Math.random() * this.qp.state['fill'].length)
@@ -190,6 +191,7 @@ export class Queue {
 
   }
   private emitGame(){
+    console.log('this.s', this.game.teams)
     const gamePlayers = {
       blue: {
         top: this.game.teams.blue.top.name,
