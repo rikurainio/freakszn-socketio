@@ -32,6 +32,7 @@ export class Queue {
    * queue("1", "jungle")
    */
   public queue(name: string, role: Role){
+    if (this.isQueuePopped) { return }
     this.deQueue(name)
     this.state[role].push(this.players[name])
     this.players[name].role = this.state[role]
