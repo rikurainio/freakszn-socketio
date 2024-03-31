@@ -67,8 +67,9 @@ io.on("connection", (socket) => {
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }
-    player.currentGame.autoJoinLobby()
+    player.currentGame.joinLobby(player)
   })
+
 
   socket.on("set-current-lobby-id", (data) => {
     Logger.qa("set-current-lobby-id", data)
