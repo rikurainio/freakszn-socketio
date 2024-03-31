@@ -19,7 +19,7 @@ export class Game {
 
         const lobbyJoinInterval = setInterval((): any => {
             if (this.joinPaused) { return }
-            if (index >= 10) {clearInterval(lobbyJoinInterval)}
+            if (index === 9) {clearInterval(lobbyJoinInterval)}
             this.joinLobby(this.players[index])
             index++
         }, delay)

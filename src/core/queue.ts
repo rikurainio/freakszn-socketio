@@ -112,7 +112,7 @@ export class Queue {
 
     for(const role of Object.keys(this.qp.state)){
       if(role === "fill"){ continue }
-      for(const team of Math.floor(Math.random() * 1) === 2 ? ["blue", "red"] : ["red", "blue"]){
+      for(const team of Math.floor(Math.random() * 2) === 1 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
           const fillSelectIndex = Math.floor(Math.random() * this.qp.state['fill'].length)
           this.game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
