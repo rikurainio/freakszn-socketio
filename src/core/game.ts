@@ -1,16 +1,23 @@
 import { Player } from "./player"
-import { Game as GameType, QueueState, Role, Side, Team } from "../lib/types"
+import { GameRole, Game as GameType, QueueState, Role, Side, Team } from "../lib/types"
+import { INITIAL_GAME } from "../lib/constants"
 
 export class Game {
     currentLobbyID: number | undefined
+    lobbyName: string | undefined
     players: Player[]
     joinPaused: boolean = false
+    game: GameType = INITIAL_GAME
 
 
     public clearGame() {
         this.currentLobbyID = undefined
         this.players = []
         this.joinPaused = false
+    }
+
+    public setLobbyName(name: string) {
+        this.lobbyName = name
     }
 
     public autoJoinLobby() {
@@ -51,6 +58,49 @@ export class Game {
     public setPlayers(game: GameType) {
         this.players = this.mergeTeams(game.teams)
     }
+
+    public updatePlayerGameStates() {
+        this.players.forEach((player) => {
+            player.socket.emit("game-update", )
+        })
+    }
+
+    private helper(player: Player): {} {
+        const {name, iconId, summonerLevel, rankData, inGameLobby} = player
+        const availability = player.checkAvailability()
+        return {name, iconId, summonerLevel, rankData, inGameLobby, availability}
+    }
+    
+    public emitGame(){
+        let gamePlayers = {
+            "blue": {
+                "top": {},
+                "jungle": {},
+                "mid": {},
+                "adc": {},
+                "support": {}
+            },
+            "red": {
+                "top": {},
+                "jungle": {},
+                "mid": {},
+                "adc": {},
+                "support": {}
+            }
+        }
+
+        Object.keys(this.game.teams).forEach((team) => {
+            Object.keys(this.game.teams.blue).forEach((role) => {
+                gamePlayers[team as keyof typeof gamePlayers][role as GameRole] = this.helper(this.game.teams[team as Side][role as GameRole])
+            })
+        })
+
+        Object.values(this.game.teams).forEach((team) => {
+            Object.values(team).forEach((player) => {
+                player.socket.emit("game-start", gamePlayers)
+            })
+        })
+      }
 
     private mergeTeams(teamGroups: any): Player[] {
         const { blue, red } = teamGroups;

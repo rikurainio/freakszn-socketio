@@ -15,11 +15,19 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   accepted: boolean
   currentGame: Game
 
-  inGame: boolean
-  clientOpen: boolean
+  inGame: boolean = false
+  inLobby: boolean = false
+  inGameLobby: boolean = false
+  currentLobbyName: string
+  clientOpen: boolean = false
 
   constructor(socket: Socket){
     this.socket = socket
+  }
+
+  public checkAvailability(): boolean {
+    if (this.inGame || this.inLobby || !this.clientOpen) { return false }
+    return true
   }
 
   public setInGame(value: boolean) {
@@ -32,6 +40,22 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setName(value: string) {
     this.name = value
+  }
+
+  public setInLobby(value: boolean) {
+    this.inLobby = value
+  }
+
+  public setCurrentLobbyName(value: string) {
+    this.currentLobbyName = value
+    if (this.currentGame) {
+      if (value === this.currentGame.lobbyName) {
+        this.inGameLobby = true
+        this.currentGame.emitGame()
+        return
+      }
+      this.inGameLobby = false
+    }
   }
 
   public setIconId(value: number) {

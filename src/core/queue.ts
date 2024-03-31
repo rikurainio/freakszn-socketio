@@ -8,7 +8,6 @@ import { io } from "socket.io-client"
 
 export class Queue {
   state: QueueState = INITIAL_QUEUE_STATE
-  game: GameType = INITIAL_GAME
   games: Record<string, Game>
   
   gameStarted: boolean = false
@@ -110,24 +109,29 @@ export class Queue {
 
     const newGame = new Game()
 
+    const newGameId = crypto.randomUUID()
+    this.games[newGameId] = newGame
+
     for(const role of Object.keys(this.qp.state)){
       if(role === "fill"){ continue }
       for(const team of Math.floor(Math.random() * 2) === 1 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
           const fillSelectIndex = Math.floor(Math.random() * this.qp.state['fill'].length)
-          this.game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
+          this.games[newGameId].game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
           continue
         }
         const selectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
-        this.game.teams[team as Side][role as GameRole] = this.qp.state[role as Role].splice(selectIndex ,1)[0]
+        this.games[newGameId].game.teams[team as Side][role as GameRole] = this.qp.state[role as Role].splice(selectIndex ,1)[0]
       }
     }
     this.isQueuePopped = false
-    newGame.setPlayers(this.game)
-    newGame.setPlayerGames(this.game)
-    console.log("Match formed successfully")
+    newGame.setLobbyName("freakszn-" + newGameId)
+    newGame.setPlayers(this.games[newGameId].game)
+    newGame.setPlayerGames(this.games[newGameId].game)
 
-    this.emitGame()
+    newGame.emitGame()
+    
+    console.log("Match formed successfully")
   }
   private queuePop(){
     if(this.isQueuePopped){ return }
@@ -181,105 +185,14 @@ export class Queue {
       fill: this.state.fill.map((p: Player) => p.name)
     }
 
-    const gamePlayers = {
-      blue: {
-        top: this.game.teams.blue.top.name,
-        jungle: this.game.teams.blue.jungle.name,
-        mid: this.game.teams.blue.mid.name,
-        adc: this.game.teams.blue.adc.name,
-        support: this.game.teams.blue.support.name
-      },
-      red: {
-        top: this.game.teams.red.top.name,
-        jungle: this.game.teams.red.jungle.name,
-        mid: this.game.teams.red.mid.name,
-        adc: this.game.teams.red.adc.name,
-        support: this.game.teams.red.support.name
-      }
-    }
-
     this.io.in('freakszn').emit("state", {
       state: statePlayers, 
-      game: gamePlayers,
       gameStarted: this.gameStarted,
       onlinePlayers: onlinePlayers
     })
 
   }
-  private emitGame(){
-    console.log('this.s', this.game.teams)
-    const gamePlayers = {
-      blue: {
-        top: {
-            name: this.game.teams.blue.top.name,
-            iconId: this.game.teams.blue.top.iconId,
-            summonerLevel: this.game.teams.blue.top.summonerLevel,
-            rankData: this.game.teams.blue.top.rankData
-        },
-        jungle: {
-            name: this.game.teams.blue.jungle.name,
-            iconId: this.game.teams.blue.jungle.iconId,
-            summonerLevel: this.game.teams.blue.jungle.summonerLevel,
-            rankData: this.game.teams.blue.jungle.rankData
-        },
-        mid: {
-            name: this.game.teams.blue.mid.name,
-            iconId: this.game.teams.blue.mid.iconId,
-            summonerLevel: this.game.teams.blue.mid.summonerLevel,
-            rankData: this.game.teams.blue.mid.rankData
-        },
-        adc: {
-            name: this.game.teams.blue.adc.name,
-            iconId: this.game.teams.blue.adc.iconId,
-            summonerLevel: this.game.teams.blue.adc.summonerLevel,
-            rankData: this.game.teams.blue.adc.rankData
-        },
-        support: {
-            name: this.game.teams.blue.support.name,
-            iconId: this.game.teams.blue.support.iconId,
-            summonerLevel: this.game.teams.blue.support.summonerLevel,
-            rankData: this.game.teams.blue.support.rankData
-        }
-    },
-    red: {
-        top: {
-            name: this.game.teams.red.top.name,
-            iconId: this.game.teams.red.top.iconId,
-            summonerLevel: this.game.teams.red.top.summonerLevel,
-            rankData: this.game.teams.red.top.rankData
-        },
-        jungle: {
-            name: this.game.teams.red.jungle.name,
-            iconId: this.game.teams.red.jungle.iconId,
-            summonerLevel: this.game.teams.red.jungle.summonerLevel,
-            rankData: this.game.teams.red.jungle.rankData
-        },
-        mid: {
-            name: this.game.teams.red.mid.name,
-            iconId: this.game.teams.red.mid.iconId,
-            summonerLevel: this.game.teams.red.mid.summonerLevel,
-            rankData: this.game.teams.red.mid.rankData
-        },
-        adc: {
-            name: this.game.teams.red.adc.name,
-            iconId: this.game.teams.red.adc.iconId,
-            summonerLevel: this.game.teams.red.adc.summonerLevel,
-            rankData: this.game.teams.red.adc.rankData
-        },
-        support: {
-            name: this.game.teams.red.support.name,
-            iconId: this.game.teams.red.support.iconId,
-            summonerLevel: this.game.teams.red.support.summonerLevel,
-            rankData: this.game.teams.red.support.rankData
-        }
-    }
-    }
-      Object.values(this.game.teams).forEach((team) => {
-        Object.values(team).forEach((player) => {
-          player.socket.emit("game-start", gamePlayers)
-        })
-      })
-  }
+  
 
   
 }

@@ -79,6 +79,16 @@ io.on("connection", (socket) => {
     player.setRank(data)
   })
 
+  socket.on("update-in-lobby", (data) => {
+    Logger.qa("update-in-lobby", data)
+    player.setInLobby(data)
+  })
+
+  socket.on("current-lobby-name", (data) => {
+    Logger.qa("current-lobby-name", data)
+    player.setCurrentLobbyName(data)
+  })
+
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }
