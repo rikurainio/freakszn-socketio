@@ -73,6 +73,11 @@ io.on("connection", (socket) => {
     Logger.qa("set-summoner-level", data)
     player.setSummonerLevel(data)
   })
+  
+  socket.on("set-summoner-rank", (data) => {
+    Logger.qa("set-summoner-rank", data)
+    player.setRank(data)
+  })
 
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)

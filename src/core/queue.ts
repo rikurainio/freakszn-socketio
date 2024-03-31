@@ -213,54 +213,64 @@ export class Queue {
         top: {
             name: this.game.teams.blue.top.name,
             iconId: this.game.teams.blue.top.iconId,
-            summonerLevel: this.game.teams.blue.top.summonerLevel
+            summonerLevel: this.game.teams.blue.top.summonerLevel,
+            rankData: this.game.teams.blue.top.rankData
         },
         jungle: {
             name: this.game.teams.blue.jungle.name,
             iconId: this.game.teams.blue.jungle.iconId,
-            summonerLevel: this.game.teams.blue.jungle.summonerLevel
+            summonerLevel: this.game.teams.blue.jungle.summonerLevel,
+            rankData: this.game.teams.blue.jungle.rankData
         },
         mid: {
             name: this.game.teams.blue.mid.name,
             iconId: this.game.teams.blue.mid.iconId,
-            summonerLevel: this.game.teams.blue.mid.summonerLevel
+            summonerLevel: this.game.teams.blue.mid.summonerLevel,
+            rankData: this.game.teams.blue.mid.rankData
         },
         adc: {
             name: this.game.teams.blue.adc.name,
             iconId: this.game.teams.blue.adc.iconId,
-            summonerLevel: this.game.teams.blue.adc.summonerLevel
+            summonerLevel: this.game.teams.blue.adc.summonerLevel,
+            rankData: this.game.teams.blue.adc.rankData
         },
         support: {
             name: this.game.teams.blue.support.name,
             iconId: this.game.teams.blue.support.iconId,
-            summonerLevel: this.game.teams.blue.support.summonerLevel
+            summonerLevel: this.game.teams.blue.support.summonerLevel,
+            rankData: this.game.teams.blue.support.rankData
         }
     },
     red: {
         top: {
             name: this.game.teams.red.top.name,
             iconId: this.game.teams.red.top.iconId,
-            summonerLevel: this.game.teams.red.top.summonerLevel
+            summonerLevel: this.game.teams.red.top.summonerLevel,
+            rankData: this.game.teams.red.top.rankData
         },
         jungle: {
             name: this.game.teams.red.jungle.name,
             iconId: this.game.teams.red.jungle.iconId,
-            summonerLevel: this.game.teams.red.jungle.summonerLevel
+            summonerLevel: this.game.teams.red.jungle.summonerLevel,
+            rankData: this.game.teams.red.jungle.rankData
         },
         mid: {
             name: this.game.teams.red.mid.name,
             iconId: this.game.teams.red.mid.iconId,
-            summonerLevel: this.game.teams.red.mid.summonerLevel
+            summonerLevel: this.game.teams.red.mid.summonerLevel,
+            rankData: this.game.teams.red.mid.rankData
         },
         adc: {
             name: this.game.teams.red.adc.name,
             iconId: this.game.teams.red.adc.iconId,
-            summonerLevel: this.game.teams.red.adc.summonerLevel
+            summonerLevel: this.game.teams.red.adc.summonerLevel,
+            rankData: this.game.teams.red.adc.rankData
         },
         support: {
             name: this.game.teams.red.support.name,
             iconId: this.game.teams.red.support.iconId,
-            summonerLevel: this.game.teams.red.support.summonerLevel
+            summonerLevel: this.game.teams.red.support.summonerLevel,
+            rankData: this.game.teams.red.support.rankData
         }
     }
     }

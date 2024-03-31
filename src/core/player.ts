@@ -5,6 +5,11 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
   iconId: number
   summonerLevel: number
+  rankData: {
+    rank: string
+    division: string
+    lp: string
+  }
   socket: Socket
   role: Player[] | undefined
   accepted: boolean
@@ -35,6 +40,10 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setSummonerLevel(value: number) {
     this.summonerLevel = value
+  }
+
+  public setRank(value: {rank: string, division: string, lp: string}) {
+    this.rankData = value
   }
 
   public joinLobby(ID: number) {
