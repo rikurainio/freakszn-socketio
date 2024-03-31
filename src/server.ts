@@ -64,6 +64,11 @@ io.on("connection", (socket) => {
     player.setName(data)
   })
 
+  socket.on("set-icon-id", (data) => {
+    Logger.qa("set-icon-id", data)
+    player.setIconId(data)
+  })
+
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }

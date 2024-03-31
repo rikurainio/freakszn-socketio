@@ -3,6 +3,7 @@ import { Game } from "./game"
 
 export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
+  iconId: number
   socket: Socket
   role: Player[]
   accepted: boolean
@@ -25,6 +26,10 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setName(value: string) {
     this.name = value
+  }
+
+  public setIconId(value: number) {
+    this.iconId = value
   }
 
   public joinLobby(ID: number) {

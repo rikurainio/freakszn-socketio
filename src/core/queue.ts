@@ -157,6 +157,19 @@ export class Queue {
 
   public emitState(){
 
+
+    const onlinePlayers: object[] = []
+
+    Object.values(this.players).forEach((player) => {
+      const partialPlayer = {
+        name: "",
+        iconId: 0
+      }
+      partialPlayer["name"] = player.name
+      partialPlayer["iconId"] = player.iconId
+      onlinePlayers.push(partialPlayer)
+    })
+
     const statePlayers = {
       top: this.state.top.map((p: Player) => p.name),
       jungle: this.state.jungle.map((p: Player) => p.name),
@@ -186,7 +199,8 @@ export class Queue {
     this.io.in('freakszn').emit("state", {
       state: statePlayers, 
       game: gamePlayers,
-      gameStarted: this.gameStarted
+      gameStarted: this.gameStarted,
+      onlinePlayers: onlinePlayers
     })
 
   }
