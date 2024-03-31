@@ -69,6 +69,11 @@ io.on("connection", (socket) => {
     player.setIconId(data)
   })
 
+  socket.on("set-summoner-level", (data) => {
+    Logger.qa("set-summoner-level", data)
+    player.setSummonerLevel(data)
+  })
+
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }

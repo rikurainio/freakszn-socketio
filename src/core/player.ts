@@ -4,6 +4,7 @@ import { Game } from "./game"
 export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
   iconId: number
+  summonerLevel: number
   socket: Socket
   role: Player[] | undefined
   accepted: boolean
@@ -30,6 +31,10 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setIconId(value: number) {
     this.iconId = value
+  }
+
+  public setSummonerLevel(value: number) {
+    this.summonerLevel = value
   }
 
   public joinLobby(ID: number) {
