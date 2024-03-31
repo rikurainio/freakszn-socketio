@@ -13,8 +13,8 @@ const io = new Server(httpServer, {
 });
 
 const players: Record<string, Player> = {}
-const game = new Game()
-const queue = new Queue(io, players, game)
+const games: Record<string, Game> = {}
+const queue = new Queue(io, players, games)
 
 
 io.on("connection", (socket) => {
@@ -66,12 +66,12 @@ io.on("connection", (socket) => {
 
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player)
-    game.joinLobby(player)
+    player.currentGame.joinLobby(player)
   })
 
   socket.on("set-current-lobby-id", (data) => {
     Logger.qa("set-current-lobby-id", data)
-    game.setLobbyID(data)
+    player.currentGame.setLobbyID(data)
   })
 
   socket.on("disconnecting", () => {

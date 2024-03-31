@@ -1,10 +1,12 @@
 import { Socket } from "socket.io"
+import { Game } from "./game"
 
-export class Player {
+export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
   socket: Socket
   role: Player[]
   accepted: boolean
+  currentGame: Game
 
   inGame: boolean
   clientOpen: boolean

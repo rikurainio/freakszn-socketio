@@ -9,7 +9,7 @@ import { io } from "socket.io-client"
 export class Queue {
   state: QueueState = INITIAL_QUEUE_STATE
   game: GameType = INITIAL_GAME
-  gameHandler: Game
+  games: Record<string, Game>
   
   gameStarted: boolean = false
   isQueuePopped: boolean = false
@@ -19,10 +19,10 @@ export class Queue {
   qp: QueuePop | undefined
   io: Server
 
-  constructor(io: Server, players: Record<string, Player>, gameHandler:Game){
+  constructor(io: Server, players: Record<string, Player>, games:Record<string, Game>){
     this.io = io
     this.players = players
-    this.gameHandler = gameHandler
+    this.games = games
   }
 
   /** 
@@ -107,6 +107,9 @@ export class Queue {
     this.stopQueuePopTimer()
     this.qp.removeAccepts()
     this.qp.removeQueues()
+
+    const newGame = new Game()
+
     for(const role of Object.keys(this.qp.state)){
       for(const team of Math.floor(Math.random() * 1) === 2 ? ["blue", "red"] : ["red", "blue"]){
         if(this.qp.state[role as Role].length === 0){
@@ -119,7 +122,8 @@ export class Queue {
       }
     }
     this.isQueuePopped = false
-    this.gameHandler.setPlayers(this.game)
+    newGame.setPlayers(this.game)
+    newGame.setPlayerGames(this.game)
     console.log("Match formed successfully")
 
     this.emitGame()

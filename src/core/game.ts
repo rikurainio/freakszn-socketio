@@ -39,6 +39,15 @@ export class Game {
         player.createLobby()
     }
 
+    public setPlayerGames(game: GameType) {
+        console.log(game)
+        Object.values(game.teams).forEach((team) => {
+            Object.values(team).forEach((player) => {
+                player.currentGame = this
+            })
+        })
+    }
+
     public setPlayers(game: GameType) {
         this.players = this.mergeTeams(game.teams)
     }
