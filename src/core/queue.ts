@@ -210,45 +210,45 @@ export class Queue {
       blue: {
         top: {
             name: this.game.teams.blue.top.name,
-            IconId: this.game.teams.blue.top.iconId
+            iconId: this.game.teams.blue.top.iconId
         },
         jungle: {
             name: this.game.teams.blue.jungle.name,
-            IconId: this.game.teams.blue.jungle.iconId
+            iconId: this.game.teams.blue.jungle.iconId
         },
         mid: {
             name: this.game.teams.blue.mid.name,
-            IconId: this.game.teams.blue.mid.iconId
+            iconId: this.game.teams.blue.mid.iconId
         },
         adc: {
             name: this.game.teams.blue.adc.name,
-            IconId: this.game.teams.blue.adc.iconId
+            iconId: this.game.teams.blue.adc.iconId
         },
         support: {
             name: this.game.teams.blue.support.name,
-            IconId: this.game.teams.blue.support.iconId
+            iconId: this.game.teams.blue.support.iconId
         }
     },
     red: {
         top: {
             name: this.game.teams.red.top.name,
-            IconId: this.game.teams.red.top.iconId
+            iconId: this.game.teams.red.top.iconId
         },
         jungle: {
             name: this.game.teams.red.jungle.name,
-            IconId: this.game.teams.red.jungle.iconId
+            iconId: this.game.teams.red.jungle.iconId
         },
         mid: {
             name: this.game.teams.red.mid.name,
-            IconId: this.game.teams.red.mid.iconId
+            iconId: this.game.teams.red.mid.iconId
         },
         adc: {
             name: this.game.teams.red.adc.name,
-            IconId: this.game.teams.red.adc.iconId
+            iconId: this.game.teams.red.adc.iconId
         },
         support: {
             name: this.game.teams.red.support.name,
-            IconId: this.game.teams.red.support.iconId
+            iconId: this.game.teams.red.support.iconId
         }
     }
     }
