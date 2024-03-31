@@ -208,19 +208,49 @@ export class Queue {
     console.log('this.s', this.game.teams)
     const gamePlayers = {
       blue: {
-        top: this.game.teams.blue.top.name,
-        jungle: this.game.teams.blue.jungle.name,
-        mid: this.game.teams.blue.mid.name,
-        adc: this.game.teams.blue.adc.name,
-        support: this.game.teams.blue.support.name
-      },
-      red: {
-        top: this.game.teams.red.top.name,
-        jungle: this.game.teams.red.jungle.name,
-        mid: this.game.teams.red.mid.name,
-        adc: this.game.teams.red.adc.name,
-        support: this.game.teams.red.support.name
-      }
+        top: {
+            name: this.game.teams.blue.top.name,
+            IconId: this.game.teams.blue.top.iconId
+        },
+        jungle: {
+            name: this.game.teams.blue.jungle.name,
+            IconId: this.game.teams.blue.jungle.iconId
+        },
+        mid: {
+            name: this.game.teams.blue.mid.name,
+            IconId: this.game.teams.blue.mid.iconId
+        },
+        adc: {
+            name: this.game.teams.blue.adc.name,
+            IconId: this.game.teams.blue.adc.iconId
+        },
+        support: {
+            name: this.game.teams.blue.support.name,
+            IconId: this.game.teams.blue.support.iconId
+        }
+    },
+    red: {
+        top: {
+            name: this.game.teams.red.top.name,
+            IconId: this.game.teams.red.top.iconId
+        },
+        jungle: {
+            name: this.game.teams.red.jungle.name,
+            IconId: this.game.teams.red.jungle.iconId
+        },
+        mid: {
+            name: this.game.teams.red.mid.name,
+            IconId: this.game.teams.red.mid.iconId
+        },
+        adc: {
+            name: this.game.teams.red.adc.name,
+            IconId: this.game.teams.red.adc.iconId
+        },
+        support: {
+            name: this.game.teams.red.support.name,
+            IconId: this.game.teams.red.support.iconId
+        }
+    }
     }
       Object.values(this.game.teams).forEach((team) => {
         Object.values(team).forEach((player) => {
