@@ -54,6 +54,11 @@ io.on("connection", (socket) => {
     player.setClientOpen(data)
   })
 
+  socket.on("set-ready", (data) => {
+    Logger.qa("set-ready", data)
+    player.setReady(data)
+  })
+
   socket.on("set-ingame", (data) => {
     Logger.qa("set-ingame", data)
     player.setInGame(data)

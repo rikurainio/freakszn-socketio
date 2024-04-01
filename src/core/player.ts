@@ -15,11 +15,13 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   accepted: boolean
   currentGame: Game
 
+  ready: boolean = false
   inGame: boolean = false
   inLobby: boolean = false
   inGameLobby: boolean = false
   currentLobbyName: string
   clientOpen: boolean = false
+  autoJoining: boolean = false
 
   constructor(socket: Socket){
     this.socket = socket
@@ -32,11 +34,13 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setInGame(value: boolean) {
     this.inGame = value
+    if (value) { this.setReady(false) }
     this.emitGame()
   }
 
   public setClientOpen(value: boolean) {
     this.clientOpen = value
+    if (!value) { this.setReady(false) }
     this.emitGame()
   }
 
@@ -46,7 +50,15 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setInLobby(value: boolean) {
     this.inLobby = value
+    if (value) { this.setReady(false) }
     this.emitGame()
+  }
+
+  public setReady(value: boolean) {
+    if (!this.checkAvailability()) { return }
+    this.ready = value
+    if (!this.currentGame) { return }
+    this.currentGame.autoJoinLobbyCheck()
   }
 
   public setCurrentLobbyName(value: string) {

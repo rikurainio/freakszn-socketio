@@ -8,6 +8,7 @@ export class Game {
     players: Player[]
     joinPaused: boolean = false
     game: GameType = INITIAL_GAME
+    autoJoining: boolean = false
 
 
     public clearGame() {
@@ -20,16 +21,33 @@ export class Game {
         this.lobbyName = name
     }
 
+    public autoJoinLobbyCheck() {
+        if (this.autoJoining) { return }
+        const allReady = this.players.every((player) => player.ready)
+        if (allReady) {
+            this.autoJoinLobby()
+        }   
+    }
+
     public autoJoinLobby() {
+        this.autoJoining = true
+        this.players.forEach((player) => player.autoJoining = true)
         const delay = 2000
         let index = 0
 
         const lobbyJoinInterval = setInterval((): any => {
             if (this.joinPaused) { return }
-            if (index === 9) {clearInterval(lobbyJoinInterval)}
+            if (index === 9) { this.stopAutoJoinLobby(lobbyJoinInterval) }
             this.joinLobby(this.players[index])
             index++
+            this.emitGame()
         }, delay)
+    }
+
+    private stopAutoJoinLobby(interval: NodeJS.Timeout) {
+        clearInterval(interval)
+        this.players.forEach((player) => player.autoJoining = false)
+        this.autoJoining = false
     }
 
     public setLobbyID(ID: number) {
@@ -66,9 +84,9 @@ export class Game {
     }
 
     private helper(player: Player): {} {
-        const {name, iconId, summonerLevel, rankData, inGameLobby} = player
+        const {name, iconId, summonerLevel, rankData, inGameLobby, ready, autoJoining} = player
         const availability = player.checkAvailability()
-        return {name, iconId, summonerLevel, rankData, inGameLobby, availability}
+        return {name, iconId, summonerLevel, rankData, inGameLobby, availability, ready, autoJoining}
     }
     
     public emitGame(){
