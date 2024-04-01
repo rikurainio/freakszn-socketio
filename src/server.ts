@@ -103,7 +103,7 @@ io.on("connection", (socket) => {
   socket.on("lobby-did-not-exist", () => {
     Logger.qa("lobby-did-not-exist")
     if (!player.currentGame) { return }
-    
+    player.currentGame.handleLobbyDidNotExist(player)
   })
 
 
