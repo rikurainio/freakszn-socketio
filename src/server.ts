@@ -67,16 +67,19 @@ io.on("connection", (socket) => {
   socket.on("set-name", (data) => {
     Logger.qa("set-name", data)
     player.setName(data)
+    queue.emitState()
   })
 
   socket.on("set-icon-id", (data) => {
     Logger.qa("set-icon-id", data)
     player.setIconId(data)
+    queue.emitState()
   })
 
   socket.on("set-summoner-level", (data) => {
     Logger.qa("set-summoner-level", data)
     player.setSummonerLevel(data)
+    queue.emitState()
   })
   
   socket.on("set-summoner-rank", (data) => {
