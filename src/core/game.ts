@@ -65,7 +65,6 @@ export class Game {
     }
 
     public setPlayerGames(game: GameType) {
-        console.log(game)
         Object.values(game.teams).forEach((team) => {
             Object.values(team).forEach((player) => {
                 player.currentGame = this
@@ -78,8 +77,9 @@ export class Game {
     }
 
     public updatePlayerGameStates() {
+        const parsedData = this.parseGameData()
         this.players.forEach((player) => {
-            player.socket.emit("game-update", this.parseGameData(player))
+            player.socket.emit("game-update", this.createEmitData(parsedData, player))
         })
     }
 
@@ -89,7 +89,7 @@ export class Game {
         return {name, iconId, summonerLevel, rankData, inGameLobby, availability, ready, autoJoining}
     }
 
-    private parseGameData(player: Player) {
+    private parseGameData() {
         let gamePlayers = {
             "blue": {
                 "top": {},
@@ -118,16 +118,36 @@ export class Game {
                 }
             }
         }
-        gamePlayers.me = this.helper(player)
 
         return gamePlayers
     }
+
+    private createEmitData(parsedData: {
+        "blue": {
+            "top": {},
+            "jungle": {},
+            "mid": {},
+            "adc": {},
+            "support": {}
+        },
+        "red": {
+            "top": {},
+            "jungle": {},
+            "mid": {},
+            "adc": {},
+            "support": {}
+        },
+        "me": {}
+    }, player: Player) {
+        parsedData.me = this.helper(player)
+        return parsedData
+    }
     
     public emitGame(){
-        
+        const parsedData = this.parseGameData()
         Object.values(this.game.teams).forEach((team) => {
             Object.values(team).forEach((player) => {
-                player.socket.emit("game-start", this.parseGameData(player))
+                player.socket.emit("game-start", this.createEmitData(parsedData, player))
             })
         })
       }
