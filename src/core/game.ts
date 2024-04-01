@@ -150,7 +150,12 @@ export class Game {
                 player.socket.emit("game-start", this.createEmitData(parsedData, player))
             })
         })
-      }
+    }
+
+    public handleLobbyDidNotExist(player: Player) {
+        this.currentLobbyID = undefined
+        player.createLobby()
+    }
 
     private mergeTeams(teamGroups: any): Player[] {
         const { blue, red } = teamGroups;

@@ -100,6 +100,12 @@ io.on("connection", (socket) => {
     player.currentGame.joinLobby(player)
   })
 
+  socket.on("lobby-did-not-exist", () => {
+    Logger.qa("lobby-did-not-exist")
+    if (!player.currentGame) { return }
+    
+  })
+
 
   socket.on("set-current-lobby-id", (data) => {
     Logger.qa("set-current-lobby-id", data)
