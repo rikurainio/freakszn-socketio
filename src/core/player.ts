@@ -55,7 +55,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   }
 
   public setReady(value: boolean) {
-    if (!this.checkAvailability()) { return }
+    if (!this.checkAvailability() && value) { return }
     this.ready = value
     this.emitGame()
     if (!this.currentGame) { return }
