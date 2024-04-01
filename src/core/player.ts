@@ -66,7 +66,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     if (this.currentGame) {
       if (value === this.currentGame.lobbyName) {
         this.inGameLobby = true
-        this.currentGame.emitGame()
+        this.currentGame.updatePlayerGameStates()
         return
       }
       this.inGameLobby = false
@@ -95,7 +95,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   private emitGame() {
     if (!this.currentGame) { return }
-    this.currentGame.emitGame()
+    this.currentGame.updatePlayerGameStates()
   }
 
   deQueue(){

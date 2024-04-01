@@ -40,7 +40,7 @@ export class Game {
             if (index === 9) { this.stopAutoJoinLobby(lobbyJoinInterval) }
             this.joinLobby(this.players[index])
             index++
-            this.emitGame()
+            this.updatePlayerGameStates()
         }, delay)
     }
 
@@ -79,7 +79,7 @@ export class Game {
 
     public updatePlayerGameStates() {
         this.players.forEach((player) => {
-            player.socket.emit("game-update", )
+            player.socket.emit("game-update", this.parseGameData(player))
         })
     }
 
@@ -88,8 +88,8 @@ export class Game {
         const availability = player.checkAvailability()
         return {name, iconId, summonerLevel, rankData, inGameLobby, availability, ready, autoJoining}
     }
-    
-    public emitGame(){
+
+    private parseGameData(player: Player) {
         let gamePlayers = {
             "blue": {
                 "top": {},
@@ -104,18 +104,30 @@ export class Game {
                 "mid": {},
                 "adc": {},
                 "support": {}
-            }
+            },
+            "me": {}
         }
 
-        Object.keys(this.game.teams).forEach((team) => {
-            Object.keys(this.game.teams.blue).forEach((role) => {
-                gamePlayers[team as keyof typeof gamePlayers][role as GameRole] = this.helper(this.game.teams[team as Side][role as GameRole])
-            })
-        })
+        for(const team of Object.keys(gamePlayers)) {
+            for (const role of ["top", "jungle", "mid", "adc", "support"]) {
+                if (team === "blue") {
+                    gamePlayers.blue[role as GameRole] = this.helper(this.game.teams[team as Side][role as GameRole])
+                }
+                if (team === "red") {
+                    gamePlayers.red[role as GameRole] = this.helper(this.game.teams[team as Side][role as GameRole])
+                }
+            }
+        }
+        gamePlayers.me = this.helper(player)
 
+        return gamePlayers
+    }
+    
+    public emitGame(){
+        
         Object.values(this.game.teams).forEach((team) => {
             Object.values(team).forEach((player) => {
-                player.socket.emit("game-start", gamePlayers)
+                player.socket.emit("game-start", this.parseGameData(player))
             })
         })
       }
