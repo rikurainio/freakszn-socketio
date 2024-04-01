@@ -57,8 +57,10 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   public setReady(value: boolean) {
     if (!this.checkAvailability()) { return }
     this.ready = value
+    this.emitGame()
     if (!this.currentGame) { return }
     this.currentGame.autoJoinLobbyCheck()
+    this.emitGame()
   }
 
   public setCurrentLobbyName(value: string) {
