@@ -32,10 +32,12 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setInGame(value: boolean) {
     this.inGame = value
+    this.emitGame()
   }
 
   public setClientOpen(value: boolean) {
     this.clientOpen = value
+    this.emitGame()
   }
 
   public setName(value: string) {
@@ -44,6 +46,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setInLobby(value: boolean) {
     this.inLobby = value
+    this.emitGame()
   }
 
   public setCurrentLobbyName(value: string) {
@@ -76,6 +79,11 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public createLobby() {
     this.socket.emit("create-lobby")
+  }
+
+  private emitGame() {
+    if (!this.currentGame) { return }
+    this.currentGame.emitGame()
   }
 
   deQueue(){
