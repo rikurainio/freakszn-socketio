@@ -101,6 +101,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   }
 
   deQueue(){
+    this.accepted = false
     if (!this.role) { return }
     try {
       this.role.splice(this.role.indexOf(this), 1)
