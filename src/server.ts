@@ -49,6 +49,11 @@ io.on("connection", (socket) => {
     queue.accept(socket.id)
   })
 
+  socket.on("decline", () => {
+    Logger.qa("decline")
+    queue.decline(socket.id)
+  })
+
   socket.on("set-client-open", (data) => {
     Logger.qa("set-client-open", data)
     player.setClientOpen(data)
