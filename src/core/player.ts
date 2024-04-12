@@ -12,9 +12,9 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   }
   socket: Socket
   role: Player[] | undefined
-  accepted: boolean
   currentGame: Game
-
+  
+  accepted: boolean = false
   ready: boolean = false
   inGame: boolean = false
   inLobby: boolean = false
