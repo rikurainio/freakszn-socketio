@@ -58,6 +58,13 @@ export class QueuePop {
     temp.forEach((player) => player.socket.emit("queue-pop", data))
   }
 
+  public emitQueuePopUndefined(){
+    Object
+      .values(this.state)
+      .forEach((pArr: Player[]) => pArr
+      .forEach((p: Player) => { p.socket.emit("queue-pop", undefined) }))
+  }
+
   private helper(player: Player): {} {
     const {name, iconId, accepted} = player
     return {name, iconId, accepted}

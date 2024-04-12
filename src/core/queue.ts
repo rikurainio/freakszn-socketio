@@ -66,6 +66,7 @@ export class Queue {
       if (!this.qp) { return }
       if (this.qp.timer <= 0) {
         this.qp.dequeueUnaccepts()
+        this.qp.emitQueuePopUndefined()
         this.qp = undefined
         this.isQueuePopped = false
         clearInterval(this.queuePopTimerInterval)
@@ -81,6 +82,7 @@ export class Queue {
 
   private handleQueuePopDecline(id: string){
     this.isQueuePopped = false
+    this.qp?.emitQueuePopUndefined()
     this.qp = undefined
     clearInterval(this.queuePopTimerInterval)
   }
@@ -127,6 +129,8 @@ export class Queue {
       }
     }
     this.isQueuePopped = false
+    this.qp.emitQueuePopUndefined()
+    this.qp = undefined
     newGame.setLobbyName("freakszn-" + newGameId)
     newGame.setPlayers(this.games[newGameId].game)
     newGame.setPlayerGames(this.games[newGameId].game)
