@@ -51,6 +51,7 @@ export class Queue {
     if(this.qp && this.qp.checkAccepts()){
       this.formMatch() 
       this.emitState()
+      return
     }
     this.qp.emitQueuePop()
     this.emitState()
