@@ -44,7 +44,7 @@ export class Queue {
     this.emitState()
   }
   public accept(id: string){
-    if(this.players[id].role === undefined){ return }
+    if(this.players[id].role === undefined || !this.qp){ return }
     this.players[id].accepted = true
     
     /** Create match if everyone accepted */
@@ -52,6 +52,7 @@ export class Queue {
       this.formMatch() 
       this.emitState()
     }
+    this.qp.emitQueuePop()
     this.emitState()
   }
   public decline(id: string){
@@ -73,6 +74,7 @@ export class Queue {
       }
       this.qp.timer--
       console.log("pop timer:", this.qp.timer)
+      this.qp.emitQueuePop()
       this.emitState()
     }, 1000)
   }
@@ -138,6 +140,7 @@ export class Queue {
     this.isQueuePopped = true
     this.qp = new QueuePop(this.getQueuePopMembers())
     this.startQueuePopTimer()
+    this.qp.emitQueuePop()
     this.emitState()
   }
   private getQueuePopMembers(){
@@ -188,7 +191,8 @@ export class Queue {
     this.io.in('freakszn').emit("state", {
       state: statePlayers, 
       gameStarted: this.gameStarted,
-      onlinePlayers: onlinePlayers
+      onlinePlayers: onlinePlayers,
+      isQueuePopped: this.isQueuePopped
     })
 
   }

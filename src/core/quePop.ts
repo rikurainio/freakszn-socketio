@@ -43,4 +43,23 @@ export class QueuePop {
       .forEach((pArr: Player[]) => pArr
       .forEach((p: Player) => {if (!p.accepted) {p.deQueue()}}))
   }
+
+  public emitQueuePop(){
+    let data: any = {
+      players: [],
+      timer: this.timer
+    }
+    let temp: Player[] = []
+    Object
+      .values(this.state)
+      .forEach((pArr: Player[]) => pArr
+      .forEach((p: Player) => { data.players.push(this.helper(p)); temp.push(p) }))
+
+    temp.forEach((player) => player.socket.emit("queue-pop", data))
+  }
+
+  private helper(player: Player): {} {
+    const {name, iconId, accepted} = player
+    return {name, iconId, accepted}
+}
 }
