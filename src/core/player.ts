@@ -92,7 +92,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   }
 
   public createLobby() {
-    this.socket.emit("create-lobby")
+    this.socket.emit("create-lobby", this.currentGame.lobbyName)
   }
 
   private emitGame() {
