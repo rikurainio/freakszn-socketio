@@ -136,8 +136,8 @@ export class Queue {
     newGame.setPlayers(this.games[newGameId].game)
     newGame.setPlayerGames(this.games[newGameId].game)
 
-    newGame.emitGame()
     newGame.initialEmit()
+    newGame.emitGame()
     
     console.log("Match formed successfully")
   }
