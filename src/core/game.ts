@@ -9,9 +9,10 @@ export class Game {
     joinPaused: boolean = false
     game: GameType = INITIAL_GAME
     autoJoining: boolean = false
+    statusMessages: string[] = []
 
     public initialEmit() {
-        this.emitStatus("Game Created")
+        this.updateStatus("Game Created")
     }
 
 
@@ -39,7 +40,7 @@ export class Game {
         const delay = 2000
         let index = 0
 
-        this.emitStatus("Auto Joining...")
+        this.updateStatus("Auto Joining...")
 
         const lobbyJoinInterval = setInterval((): any => {
             if (this.joinPaused) { return }
@@ -55,19 +56,20 @@ export class Game {
         this.players.forEach((player) => player.autoJoining = false)
         this.autoJoining = false
 
-        this.emitStatus("Auto Joining Stopped")
+        this.updateStatus("Auto Joining Stopped")
     }
 
     public setLobbyID(ID: number) {
         this.currentLobbyID = ID
         this.joinPaused = false
 
-        this.emitStatus("Lobby Created")
+        this.updateStatus("Lobby Created")
     }
 
     public joinLobby(player: Player) {
         if (!this.currentLobbyID) { this.createLobby(player); this.joinPaused = true; return }
         player.joinLobby(this.currentLobbyID)
+        this.updateStatus(`${player.name} joined the lobby`)
     }
 
     public createLobby(player: Player) {
@@ -89,14 +91,13 @@ export class Game {
     public updatePlayerGameStates() {
         const parsedData = this.parseGameData()
         this.players.forEach((player) => {
-            player.socket.emit("game-update", this.createEmitData(parsedData, player))
+            player.socket.emit("game-update", this.createEmitData(parsedData, player, this.statusMessages))
         })
     }
 
-    private emitStatus(status: string) {
-        this.players.forEach((player) => {
-            player.socket.emit("game-status", status)
-        })
+    private updateStatus(status: string) {
+        if (this.statusMessages.length >= 3) {this.statusMessages.shift()}
+        this.statusMessages.push(status)
     }
 
     private helper(player: Player): {} {
@@ -121,7 +122,8 @@ export class Game {
                 "adc": {},
                 "support": {}
             },
-            "me": {}
+            "me": {},
+            "statusMessages": []
         }
 
         for(const team of Object.keys(gamePlayers)) {
@@ -153,9 +155,11 @@ export class Game {
             "adc": {},
             "support": {}
         },
-        "me": {}
-    }, player: Player) {
+        "me": {},
+        "statusMessages": string[]
+    }, player: Player, statusMessages: string[]) {
         parsedData.me = this.helper(player)
+        parsedData.statusMessages = statusMessages
         return parsedData
     }
     
@@ -163,7 +167,7 @@ export class Game {
         const parsedData = this.parseGameData()
         Object.values(this.game.teams).forEach((team) => {
             Object.values(team).forEach((player) => {
-                player.socket.emit("game-start", this.createEmitData(parsedData, player))
+                player.socket.emit("game-start", this.createEmitData(parsedData, player, this.statusMessages))
             })
         })
     }
