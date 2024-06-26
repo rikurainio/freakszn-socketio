@@ -96,6 +96,7 @@ export class Game {
     }
 
     private updateStatus(status: string) {
+        if (status === this.statusMessages[this.statusMessages.length - 1]) { return }
         if (this.statusMessages.length >= 3) {this.statusMessages.shift()}
         this.statusMessages.push(status)
 
@@ -177,6 +178,8 @@ export class Game {
     public handleLobbyDidNotExist(player: Player) {
         this.currentLobbyID = undefined
         player.createLobby()
+
+        this.updateStatus("Lobby Missing.. Creating New Lobby")
     }
 
     private mergeTeams(teamGroups: any): Player[] {
