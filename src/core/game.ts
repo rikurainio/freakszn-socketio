@@ -10,6 +10,10 @@ export class Game {
     game: GameType = INITIAL_GAME
     autoJoining: boolean = false
 
+    public initialEmit() {
+        this.emitStatus("Game Created")
+    }
+
 
     public clearGame() {
         this.currentLobbyID = undefined
@@ -35,6 +39,8 @@ export class Game {
         const delay = 2000
         let index = 0
 
+        this.emitStatus("Auto Joining...")
+
         const lobbyJoinInterval = setInterval((): any => {
             if (this.joinPaused) { return }
             if (index === 9) { this.stopAutoJoinLobby(lobbyJoinInterval) }
@@ -48,11 +54,15 @@ export class Game {
         clearInterval(interval)
         this.players.forEach((player) => player.autoJoining = false)
         this.autoJoining = false
+
+        this.emitStatus("Auto Joining Stopped")
     }
 
     public setLobbyID(ID: number) {
         this.currentLobbyID = ID
         this.joinPaused = false
+
+        this.emitStatus("Lobby Created")
     }
 
     public joinLobby(player: Player) {
@@ -80,6 +90,12 @@ export class Game {
         const parsedData = this.parseGameData()
         this.players.forEach((player) => {
             player.socket.emit("game-update", this.createEmitData(parsedData, player))
+        })
+    }
+
+    private emitStatus(status: string) {
+        this.players.forEach((player) => {
+            player.socket.emit("game-status", status)
         })
     }
 
