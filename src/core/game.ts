@@ -97,7 +97,7 @@ export class Game {
 
     private updateStatus(status: string) {
         if (status === this.statusMessages[this.statusMessages.length - 1]) { return }
-        if (this.statusMessages.length >= 3) {this.statusMessages.shift()}
+        if (this.statusMessages.length >= 10) {this.statusMessages.shift()}
         this.statusMessages.push(status)
 
         this.updatePlayerGameStates()
