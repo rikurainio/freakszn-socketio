@@ -98,6 +98,8 @@ export class Game {
     private updateStatus(status: string) {
         if (this.statusMessages.length >= 3) {this.statusMessages.shift()}
         this.statusMessages.push(status)
+
+        this.updatePlayerGameStates()
     }
 
     private helper(player: Player): {} {
