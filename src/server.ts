@@ -102,6 +102,11 @@ io.on("connection", (socket) => {
     player.setCurrentLobbyName(data)
   })
 
+  socket.on("open-draft", (data) => {
+    Logger.qa("open-draft", data)
+    player.openDraft()
+  })
+
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }

@@ -10,10 +10,34 @@ export class Game {
     game: GameType = INITIAL_GAME
     autoJoining: boolean = false
     statusMessages: string[] = []
+    draftUrl: string | undefined
 
-    public initialEmit() {
+    public initialize() {
         this.updateStatus("Game Created")
+        this.createDraft()
     }
+
+    public createDraft() {
+        const options = {
+          method: "POST",
+          headers: {
+            'Authorization': 'Bearer test'
+          },
+          body: JSON.stringify({ "blueName": "Blue", "redName": "Red"})
+        }
+    
+        fetch("https://drafter.lol/api/room", options)
+        .then(
+          res => {
+            if (!res.ok) { throw new Error(res.statusText) }
+            return res.json()
+          }
+        )
+        .then(data => {
+          this.draftUrl = data.url
+          this.updateStatus("Draft Created")
+        }).catch(err => console.log(err))
+      }
 
 
     public clearGame() {
