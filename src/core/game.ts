@@ -36,7 +36,7 @@ export class Game {
         .then(data => {
           this.draftUrl = data.url
           this.updateStatus("Draft Created")
-        }).catch(err => console.log(err))
+        }).catch(err => {console.log(err); this.updateStatus("Draft Creation Failed")})
       }
 
 
