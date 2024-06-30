@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
 
   socket.on("dequeue", () => {
     Logger.qa("dequeue", id)
-    queue.deQueue(socket.id)
+    queue.leaveQueue(socket.id)
   })
 
   socket.on("accept", () => {

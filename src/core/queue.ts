@@ -39,7 +39,7 @@ export class Queue {
     this.emitState()
   }
   public queueDuo(player1Id: string, player2Id: string, player1Role: Role, player2Role: Role){
-    if (this.isQueuePopped || this.checkRoomForDuo(player1Role, player2Role)) { return }
+    if (this.isQueuePopped || !this.checkRoomForDuo(player1Role, player2Role)) { return }
     this.deQueue(player1Id)
     this.deQueue(player2Id)
 
@@ -56,6 +56,11 @@ export class Queue {
   public deQueue(id: string){
     if(!id){ return }
     this.players[id]?.deQueue()
+    this.emitState()
+  }
+  public leaveQueue(id: string) {
+    if(!id){ return }
+    this.players[id]?.leaveQueue()
     this.emitState()
   }
   public accept(id: string){
