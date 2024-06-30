@@ -169,6 +169,11 @@ export class Queue {
 
         if ( selectedPlayer.duo ) {
           const duoPlayer = selectedPlayer.duo
+          for(let i=0; i<this.qp.state[duoPlayer.roleInDuo as Role].length; i++) {
+              if ( this.qp.state[duoPlayer.roleInDuo as Role][i] === duoPlayer) {
+                  this.qp.state[duoPlayer.roleInDuo as Role].splice(i, 1)
+              }
+          }
           this.games[newGameId].game.teams[team as Side][duoPlayer.roleInDuo as GameRole] = duoPlayer
         }
 
