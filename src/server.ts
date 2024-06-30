@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
 
   socket.on("set-tagline", (data) => {
     Logger.qa("set-tagline", data)
-    player.setName(data)
+    player.setTagline(data)
     queue.emitState()
   })
 
