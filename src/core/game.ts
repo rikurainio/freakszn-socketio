@@ -124,9 +124,9 @@ export class Game {
         if (this.statusMessages.length >= 10) {this.statusMessages.shift()}
         const date = new Date()
 
-        var seconds = date.getSeconds();
-        var minutes = date.getMinutes();
-        var hour = date.getHours();
+        let seconds = String(date.getSeconds()).padStart(2, '0')
+        let minutes = String(date.getMinutes()).padStart(2, '0')
+        let hour = String(date.getHours()).padStart(2, '0')
 
         this.statusMessages.push(`[${hour}:${minutes}:${seconds}] ${status};${crypto.randomUUID().slice(0, 5)}`)
 
