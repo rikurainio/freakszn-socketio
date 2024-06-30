@@ -75,6 +75,12 @@ io.on("connection", (socket) => {
     queue.emitState()
   })
 
+  socket.on("set-tagline", (data) => {
+    Logger.qa("set-tagline", data)
+    player.setName(data)
+    queue.emitState()
+  })
+
   socket.on("set-icon-id", (data) => {
     Logger.qa("set-icon-id", data)
     player.setIconId(data)

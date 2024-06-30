@@ -134,9 +134,9 @@ export class Game {
     }
 
     private helper(player: Player): {} {
-        const {name, iconId, summonerLevel, rankData, inGameLobby, ready, autoJoining} = player
+        const {name, tagline, iconId, summonerLevel, rankData, inGameLobby, ready, autoJoining} = player
         const availability = player.checkAvailability()
-        return {name, iconId, summonerLevel, rankData, inGameLobby, availability, ready, autoJoining}
+        return {name, tagline, iconId, summonerLevel, rankData, inGameLobby, availability, ready, autoJoining}
     }
 
     private parseGameData() {

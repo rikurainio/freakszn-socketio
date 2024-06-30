@@ -3,6 +3,7 @@ import { Game } from "./game"
 
 export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
+  tagline: string
   iconId: number
   summonerLevel: number
   rankData: {
@@ -46,6 +47,10 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setName(value: string) {
     this.name = value
+  }
+
+  public setTagline(value: string) {
+    this.tagline = value
   }
 
   public setInLobby(value: boolean) {
