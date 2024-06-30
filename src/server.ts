@@ -133,6 +133,8 @@ io.on("connection", (socket) => {
   })
 
   socket.on("disconnecting", () => {
+    Logger.qa("disconnecting", socket.id)
+    queue.deQueue(socket.id)
     delete players[socket.id]
   })
 });
