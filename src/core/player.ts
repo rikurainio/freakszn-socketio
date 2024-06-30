@@ -1,5 +1,6 @@
 import { Socket } from "socket.io"
 import { Game } from "./game"
+import { GameRole } from "../lib/types"
 
 export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   name: string
@@ -14,6 +15,8 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   socket: Socket
   role: Player[] | undefined
   currentGame: Game
+  duo: Player | undefined
+  roleInDuo: GameRole | undefined
   
   accepted: boolean = false
   ready: boolean = false
@@ -31,6 +34,18 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   public checkAvailability(): boolean {
     if (this.inGame || this.inLobby || !this.clientOpen) { return false }
     return true
+  }
+
+  public removeDuo() {
+    if (!this.duo) { return }
+
+    const temp = this.duo
+    this.duo = undefined
+
+    temp.removeDuo()
+    
+    this.duo = undefined
+    this.roleInDuo = undefined
   }
 
   public setInGame(value: boolean) {

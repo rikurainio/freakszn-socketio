@@ -38,9 +38,29 @@ export class Queue {
     this.canFormMatch()
     this.emitState()
   }
+  public queueDuo(player1Id: string, player2Id: string, player1Role: Role, player2Role: Role){
+    if (this.isQueuePopped || this.checkRoomForDuo(player1Role, player2Role)) { return }
+    this.deQueue(player1Id)
+    this.deQueue(player2Id)
+
+    this.state[player1Role].push(this.players[player1Id])
+    this.players[player1Id].role = this.state[player1Role]
+
+    this.state[player2Role].push(this.players[player2Id])
+    this.players[player2Id].role = this.state[player2Role]
+
+    this.canFormMatch()
+    this.emitState()
+
+  }
   public deQueue(id: string){
     if(!id){ return }
     this.players[id]?.deQueue()
+
+    if (this.players[id].duo) { // Duo check
+      this.players[id].duo?.deQueue()
+      this.players[id].duo?.removeDuo()
+    }
     this.emitState()
   }
   public accept(id: string){
@@ -79,6 +99,22 @@ export class Queue {
       this.qp.emitQueuePop()
       this.emitState()
     }, 1000)
+  }
+
+  private checkRoomForDuo(player1Role: Role, player2Role: Role) {
+    let sum = 0;
+    for (const role of Object.keys(this.state)) {
+      if (role === 'fill') {
+        sum += this.state.fill.length;
+      } else {
+        sum += Math.min(this.state[role as Role].length, 2);
+      }
+    }
+    if (sum >= 9) {
+      return false
+    }
+
+    return this.state[player1Role].length <= 1 && this.state[player2Role].length <= 1
   }
 
   private handleQueuePopDecline(id: string){
@@ -125,8 +161,18 @@ export class Queue {
           this.games[newGameId].game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
           continue
         }
+        if (this.qp.state[role as Role].length === 0) { continue }
+
         const selectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
-        this.games[newGameId].game.teams[team as Side][role as GameRole] = this.qp.state[role as Role].splice(selectIndex ,1)[0]
+        const selectedPlayer = this.qp.state[role as Role].splice(selectIndex ,1)[0]
+        this.games[newGameId].game.teams[team as Side][role as GameRole] = selectedPlayer
+
+        if ( selectedPlayer.duo ) {
+          const duoPlayer = selectedPlayer.duo
+          this.games[newGameId].game.teams[team as Side][duoPlayer.roleInDuo as GameRole] = duoPlayer
+        }
+
+
       }
     }
     this.isQueuePopped = false

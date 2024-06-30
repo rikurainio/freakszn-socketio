@@ -4,6 +4,7 @@ import { Queue } from "./core/queue";
 import { Player } from "./core/player";
 import { Game } from "./core/game";
 import { Logger } from "./lib/logger";
+import { Duo } from "./core/duo";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -15,6 +16,7 @@ const io = new Server(httpServer, {
 const players: Record<string, Player> = {}
 const games: Record<string, Game> = {}
 const queue = new Queue(io, players, games)
+const duo = new Duo(players, queue)
 
 
 io.on("connection", (socket) => {
@@ -32,6 +34,32 @@ io.on("connection", (socket) => {
   socket.on("queue", (role) => {
     Logger.qa("queue", role, socket.id)
     queue.queue(socket.id, role)
+  })
+
+  socket.on("duo-queue", (data ) => { // {duoName: string, duoTagline: string, myRole: role, duoRole: role}
+    Logger.qa("duo-queue", data)
+    const duoPlayer = Object.values(players).find(player => player.name === data["duoName"] && player.tagline === data["duoTagline"])
+    if (!duoPlayer) {return}
+    duo.duoRequest(player, {
+      duoName: data["duoName"]+data["duoTagline"],
+      myRole: data["myRole"],
+      duoRole: data["duoRole"]
+    })
+  })
+
+  socket.on("duo-accept", () => {
+    Logger.qa("duo-accept")
+    duo.acceptDuo(player)
+  })
+
+  socket.on("duo-decline", () => {
+    Logger.qa("duo-decline")
+    duo.declineDuo(player)
+  })
+
+  socket.on("duo-cancel", () => {
+    Logger.qa("duo-cancel")
+    duo.cancelDuo(player)
   })
 
   socket.on("mock-accept-all", () => {
