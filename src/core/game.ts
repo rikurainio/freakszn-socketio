@@ -128,7 +128,7 @@ export class Game {
         var minutes = date.getMinutes();
         var hour = date.getHours();
 
-        this.statusMessages.push(`[${hour}:${minutes}:${seconds}] ${status}`)
+        this.statusMessages.push(`[${hour}:${minutes}:${seconds}] ${status};${crypto.randomUUID().slice(0, 5)}`)
 
         this.updatePlayerGameStates()
     }
