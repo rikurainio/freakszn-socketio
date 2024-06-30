@@ -17,7 +17,7 @@ export class Duo {
         if (this.checkDuoRequests(this.getPlayerName(player)) || this.checkDuoRequests(requestData["duoName"])) { return; }
         this.duoRequests[this.getPlayerName(player)] = requestData
 
-        this.getPlayerObjectByName(requestData["duoName"]).socket.emit("duo-request", this.helper(player))
+        this.getPlayerObjectByName(requestData["duoName"]).socket.emit("duo-request", {"requester": this.helper(player), "requesterRole": requestData["myRole"], "yourRole": requestData["duoRole"]})
     }
 
     public acceptDuo(player: Player) {
