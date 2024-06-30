@@ -155,13 +155,17 @@ export class Queue {
 
     for(const role of Object.keys(this.qp.state)){
       if(role === "fill"){ continue }
+
       for(const team of Math.floor(Math.random() * 2) === 1 ? ["blue", "red"] : ["red", "blue"]){
-        if(this.qp.state[role as Role].length === 0){
+
+        if(this.qp.state[role as Role].length === 0 && this.games[newGameId].game.teams[team as Side][role as GameRole]?.name === undefined){
           const fillSelectIndex = Math.floor(Math.random() * this.qp.state['fill'].length)
           this.games[newGameId].game.teams[team as Side][role as GameRole] = this.qp.state['fill'].splice(fillSelectIndex, 1)[0]
           continue
         }
+
         if (this.qp.state[role as Role].length === 0) { continue }
+
 
         const selectIndex = Math.floor(Math.random() * this.qp.state[role as Role].length)
         const selectedPlayer = this.qp.state[role as Role].splice(selectIndex ,1)[0]
@@ -172,6 +176,7 @@ export class Queue {
           for(let i=0; i<this.qp.state[duoPlayer.roleInDuo as Role].length; i++) {
               if ( this.qp.state[duoPlayer.roleInDuo as Role][i] === duoPlayer) {
                   this.qp.state[duoPlayer.roleInDuo as Role].splice(i, 1)
+                  break
               }
           }
           this.games[newGameId].game.teams[team as Side][duoPlayer.roleInDuo as GameRole] = duoPlayer
