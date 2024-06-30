@@ -83,11 +83,11 @@ export class Game {
         this.updateStatus("Auto Joining Stopped")
     }
 
-    public setLobbyID(ID: number) {
+    public setLobbyID(ID: number, player: Player) {
         this.currentLobbyID = ID
         this.joinPaused = false
 
-        this.updateStatus("Lobby Created")
+        this.updateStatus(`${player.name} created the Lobby`)
     }
 
     public joinLobby(player: Player) {
@@ -122,7 +122,13 @@ export class Game {
     private updateStatus(status: string) {
         if (status === this.statusMessages[this.statusMessages.length - 1]) { return }
         if (this.statusMessages.length >= 10) {this.statusMessages.shift()}
-        this.statusMessages.push(status)
+        const date = new Date()
+
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hour = date.getHours();
+
+        this.statusMessages.push(`[${hour}:${minutes}:${seconds}] ${status}`)
 
         this.updatePlayerGameStates()
     }

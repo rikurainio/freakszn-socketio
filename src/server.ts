@@ -123,7 +123,7 @@ io.on("connection", (socket) => {
   socket.on("set-current-lobby-id", (data) => {
     Logger.qa("set-current-lobby-id", data)
     if (!player.currentGame || player.currentGame.currentLobbyID === data) { return }
-    player.currentGame.setLobbyID(data)
+    player.currentGame.setLobbyID(data, player)
   })
 
   socket.on("disconnecting", () => {
