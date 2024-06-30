@@ -51,6 +51,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   public setInLobby(value: boolean) {
     this.inLobby = value
     if (value) { this.setReady(false) }
+    if (!value) { this.inGameLobby = false }
     this.emitGame()
   }
 
@@ -72,14 +73,12 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
 
   public setCurrentLobbyName(value: string) {
     this.currentLobbyName = value
-    if (this.currentGame) {
-      if (value === this.currentGame.lobbyName) {
+    if (this.currentGame && value === this.currentGame.lobbyName) {
         this.inGameLobby = true
         this.currentGame.updatePlayerGameStates()
         return
-      }
-      this.inGameLobby = false
     }
+    this.inGameLobby = false
   }
 
   public setIconId(value: number) {
