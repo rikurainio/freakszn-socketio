@@ -33,6 +33,7 @@ export class Queue {
   public queue(name: string, role: Role){
     if (this.isQueuePopped) { return }
     this.deQueue(name)
+    if (this.players[name].duo) { this.players[name].deQueueDuo()}
     this.state[role].push(this.players[name])
     this.players[name].role = this.state[role]
     this.canFormMatch()

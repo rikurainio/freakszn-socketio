@@ -144,7 +144,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     }
   }
 
-  deQueue(){
+  public deQueue(){
     this.accepted = false
     if (!this.role) { return }
 
@@ -155,5 +155,12 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     } catch (e) {
       console.log('cant deque:', e)
     }
+  }
+
+  public deQueueDuo() {
+    if (!this.duo) { return }
+
+    this.duo.deQueue()
+    this.removeDuo()
   }
 }
