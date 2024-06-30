@@ -43,7 +43,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     this.duo = undefined
 
     temp.removeDuo()
-    
+
     this.duo = undefined
     this.roleInDuo = undefined
   }
@@ -132,6 +132,13 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     try {
       this.role.splice(this.role.indexOf(this), 1)
       this.role = undefined
+
+      if (this.duo) {
+        const temp = this.duo
+        this.removeDuo()
+        temp.deQueue()
+      }
+
     } catch (e) {
       console.log('cant deque:', e)
     }

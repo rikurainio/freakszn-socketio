@@ -56,11 +56,6 @@ export class Queue {
   public deQueue(id: string){
     if(!id){ return }
     this.players[id]?.deQueue()
-
-    if (this.players[id].duo) { // Duo check
-      this.players[id].duo?.deQueue()
-      this.players[id].duo?.removeDuo()
-    }
     this.emitState()
   }
   public accept(id: string){
@@ -113,7 +108,6 @@ export class Queue {
     if (sum >= 9) {
       return false
     }
-
     return this.state[player1Role].length <= 1 && this.state[player2Role].length <= 1
   }
 
