@@ -222,10 +222,12 @@ export class Queue {
     Object.values(this.players).forEach((player) => {
       const partialPlayer = {
         name: "",
+        tagline: "",
         iconId: 0,
         summonerLevel: 0
       }
       partialPlayer["name"] = player.name
+      partialPlayer["tagline"] = player.tagline
       partialPlayer["iconId"] = player.iconId
       partialPlayer["summonerLevel"] = player.summonerLevel
       onlinePlayers.push(partialPlayer)
