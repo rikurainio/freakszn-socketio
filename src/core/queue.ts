@@ -253,7 +253,6 @@ export class Queue {
       const partialPlayer = {
         name: "",
         tagline: "",
-        duoTag: "",
         iconId: 0,
         summonerLevel: 0
       }
@@ -261,17 +260,16 @@ export class Queue {
       partialPlayer["tagline"] = player.tagline
       partialPlayer["iconId"] = player.iconId
       partialPlayer["summonerLevel"] = player.summonerLevel
-      partialPlayer["duoTag"] = player.duoTag
       onlinePlayers.push(partialPlayer)
     })
 
     const statePlayers = {
-      top: this.state.top.map((p: Player) => p.name),
-      jungle: this.state.jungle.map((p: Player) => p.name),
-      mid: this.state.mid.map((p: Player) => p.name),
-      adc: this.state.adc.map((p: Player) => p.name),
-      support: this.state.support.map((p: Player) => p.name),
-      fill: this.state.fill.map((p: Player) => p.name)
+      top: this.state.top.map((p: Player) => ({name: p.name, duoTag: p.duoTag})),
+      jungle: this.state.jungle.map((p: Player) => ({name: p.name, duoTag: p.duoTag})),
+      mid: this.state.mid.map((p: Player) => ({name: p.name, duoTag: p.duoTag})),
+      adc: this.state.adc.map((p: Player) => ({name: p.name, duoTag: p.duoTag})),
+      support: this.state.support.map((p: Player) => ({name: p.name, duoTag: p.duoTag})),
+      fill: this.state.fill.map((p: Player) => ({name: p.name, duoTag: p.duoTag}))
     }
 
     this.io.in('freakszn').emit("state", {
