@@ -16,6 +16,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
   role: Player[] | undefined
   currentGame: Game
   duo: Player | undefined
+  duoTag: string = ""
   roleInDuo: GameRole | undefined
   
   accepted: boolean = false
@@ -132,6 +133,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     try {
       this.role.splice(this.role.indexOf(this), 1)
       this.role = undefined
+      this.duoTag = ""
 
       if (this.duo) {
         const temp = this.duo
@@ -151,6 +153,7 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     try {
       this.role.splice(this.role.indexOf(this), 1)
       this.role = undefined
+      this.duoTag = ""
 
     } catch (e) {
       console.log('cant deque:', e)

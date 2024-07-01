@@ -15,6 +15,8 @@ export class Queue {
   queuePopTimer = () => { return this.qp?.timer }
   queuePopTimerInterval: NodeJS.Timeout | undefined
   players: Record<string, Player>
+  duoTags: string[] = ["Krug", "Raptor", "Gromp", "Wolf", "Brambleback", "Sentinel", "Minion", "Herald", "Baron", "Dragon"]
+  takenDuoTags: string[] = []
   qp: QueuePop | undefined
   io: Server
 
@@ -41,8 +43,14 @@ export class Queue {
   }
   public queueDuo(player1Id: string, player2Id: string, player1Role: Role, player2Role: Role){
     if (this.isQueuePopped || !this.checkRoomForDuo(player1Role, player2Role)) { return }
+
+    const duoTag = this.getRandomDuoTag()
+
     this.deQueue(player1Id)
     this.deQueue(player2Id)
+
+    this.players[player1Id].duoTag = duoTag
+    this.players[player2Id].duoTag = duoTag
 
     this.state[player1Role].push(this.players[player1Id])
     this.players[player1Id].role = this.state[player1Role]
@@ -54,8 +62,20 @@ export class Queue {
     this.emitState()
 
   }
+  private getRandomDuoTag(): string {
+    let randomIndex = Math.floor(Math.random() * this.duoTags.length);
+    if (this.takenDuoTags.includes(this.duoTags[randomIndex])) {
+      return this.getRandomDuoTag();
+    }
+    this.takenDuoTags.push(this.duoTags[randomIndex]);
+    return this.duoTags[randomIndex];
+  }
+  private removeTakenDuoTag(player: Player) {
+    this.takenDuoTags.splice(this.takenDuoTags.indexOf(player.duoTag), 1)
+  }
   public deQueue(id: string){
     if(!id){ return }
+    if(this.players[id].duoTag !== "") {this.removeTakenDuoTag(this.players[id])}
     this.players[id]?.deQueue()
     this.emitState()
   }
@@ -233,6 +253,7 @@ export class Queue {
       const partialPlayer = {
         name: "",
         tagline: "",
+        duoTag: "",
         iconId: 0,
         summonerLevel: 0
       }
@@ -240,6 +261,7 @@ export class Queue {
       partialPlayer["tagline"] = player.tagline
       partialPlayer["iconId"] = player.iconId
       partialPlayer["summonerLevel"] = player.summonerLevel
+      partialPlayer["duoTag"] = player.duoTag
       onlinePlayers.push(partialPlayer)
     })
 
