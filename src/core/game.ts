@@ -3,6 +3,8 @@ import { GameRole, Game as GameType, QueueState, Role, Side, Team } from "../lib
 import { INITIAL_GAME } from "../lib/constants"
 
 export class Game {
+    gameList: Record<string, Game>
+    id: string
     currentLobbyID: number | undefined
     lobbyName: string | undefined
     players: Player[]
@@ -11,6 +13,12 @@ export class Game {
     autoJoining: boolean = false
     statusMessages: string[] = []
     draftUrl: string | undefined
+    gameEnded: boolean = false
+
+    constructor(gameList: Record<string, Game>, id: string) {
+        this.gameList = gameList
+        this.id = id
+    }
 
     public initialize() {
         this.updateStatus("Game Created")
@@ -44,6 +52,40 @@ export class Game {
         this.currentLobbyID = undefined
         this.players = []
         this.joinPaused = false
+    }
+    private deleteGame() {
+        delete this.gameList[this.id]
+    }
+
+    public endOfGame(data: any) {
+        if (!this.validateEndOfGameData(data) || this.gameEnded) { return }
+
+        // TODO > DISCORD WEBHOOK TO POST END OF GAME SCREEN
+        this.gameEnded = true
+        this.updateStatus("Game Ended")
+
+        setTimeout(() => {
+            this.emitEndOfGame()
+            this.deleteGame()
+        }, 30000);
+    }
+
+    private emitEndOfGame() {
+        this.players.forEach((player) => {
+            player.socket.emit("game-end", {})
+        })
+    }
+
+    private validateEndOfGameData(data: any): boolean {
+        for (const team of data["teams"]) {
+            for (const player of team["players"]) {
+                if (this.players.find(p => p.name === player["summonerName"])) {
+                    continue
+                }
+                return false
+            }
+        }
+        return true
     }
 
     public setLobbyName(name: string) {

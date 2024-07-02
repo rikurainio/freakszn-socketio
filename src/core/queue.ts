@@ -168,9 +168,8 @@ export class Queue {
     this.qp.removeAccepts()
     this.qp.removeQueues()
 
-    const newGame = new Game()
-
     const newGameId = crypto.randomUUID()
+    const newGame = new Game(this.games, newGameId)
     this.games[newGameId] = newGame
 
     for(const role of Object.keys(this.qp.state)){

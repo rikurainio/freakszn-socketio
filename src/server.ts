@@ -141,6 +141,11 @@ io.on("connection", (socket) => {
     player.openDraft()
   })
 
+  socket.on("end-of-game", (data) => {
+    Logger.qa("end-of-game", data)
+    player.endOfGame(data)
+  })
+
   socket.on("join-lobby", () => {
     Logger.qa("join-lobby", player.name)
     if (!player.currentGame) { return }

@@ -82,6 +82,11 @@ export class Player { // TODO REMOVE CURRENTGAME AFTER GAME ENDS
     this.socket.emit("open-draft", this.currentGame.draftUrl)
   }
 
+  public endOfGame(data: any) {
+    if (!this.currentGame) { return }
+    this.currentGame.endOfGame(data)
+  }
+
 
   public setReady(value: boolean) {
     if (!this.checkAvailability() && value) { return }
